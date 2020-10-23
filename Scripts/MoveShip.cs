@@ -3,13 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Takes in two GameObjects - Ship to be moved, and an empty object holding ports' locations
+/// The position is constantly updated to move to the nextPortPos
+/// </summary>
 public class MoveShip : MonoBehaviour
 {
+    //ship gameobject to be attached in the inspector
     [SerializeField]
     GameObject objectToMove;
 
-    // TODO array will be all the children of the parent transform passed here
+    //parent object that holds all ports
     [SerializeField]
+    Transform portsParent;
+
     Transform[] ports;
 
     Transform nextPort;
@@ -17,34 +24,38 @@ public class MoveShip : MonoBehaviour
 
     void Start()
     {
+
         nextPortPos = transform.position;
+
+        //fill array with ports
+        ports = portsParent.GetComponentsInChildren<Transform>();
     }
 
     void Update()
     {
-        GoToNextPoint();
+        GoToNextPort();
     }
 
-    void GoToNextPoint()
+    //updates position every frame to move towards next port
+    void GoToNextPort()
     {
         objectToMove.transform.position = Vector3.Lerp(transform.position, nextPortPos, Time.deltaTime);
     }
 
-    // called by unity event
-    public void StartMoving()
+    //called by UnityEvent
+    //gets the next port from an array and sets the position to use in GoToNextPoint
+    public void SetNextPort()
     {
+        if (ports.Length <= currentPortNumber() + 1)
+            nextPort = ports[currentPortNumber() + 1];
+        else  //for testing purposes
+            nextPort = ports[0];
+
         nextPortPos = nextPort.position;
     }
 
-
-    public void ChooseNextPort(int portNumber)
+    int currentPortNumber()
     {
-        if (nextPort != ports[portNumber])
-            nextPort = ports[portNumber];
-        else
-        {
-            Array.Reverse(ports);
-            nextPort = ports[portNumber];
-        }
+        return Array.IndexOf(ports, nextPort);
     }
 }
