@@ -46,7 +46,7 @@ public class MoveShip : MonoBehaviour
     //gets the next port from an array and sets the position to use in GoToNextPoint
     public void SetNextPort()
     {
-        if (ports.Length <= currentPortNumber() + 1)
+        if (currentPortNumber()+1 < ports.Length)
             nextPort = ports[currentPortNumber() + 1];
         else  //for testing purposes
             nextPort = ports[0];
