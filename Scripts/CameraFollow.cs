@@ -7,9 +7,11 @@ public class CameraFollow : MonoBehaviour
     [SerializeField]
     Transform objectToFollow;
     [SerializeField]
-    float xOffset = 10f;
+    float zOffset, xOffset = 10f;
     [SerializeField]
-    float zOffset = 10f;
+    float horizontal = 10f;
+    [SerializeField]
+    float vertical = 10f;
     [SerializeField]
     float height = 10f;
 
@@ -23,9 +25,11 @@ public class CameraFollow : MonoBehaviour
     {
         if (objectToFollow != null)
         {
-            transform.LookAt(objectToFollow);
+            transform.LookAt(objectToFollow,Vector3.up);
             transform.position = new Vector3(objectToFollow.position.x + xOffset,
                 objectToFollow.position.y + height, objectToFollow.position.z + zOffset);
+            transform.rotation = new Quaternion(
+                transform.rotation.x + horizontal, transform.rotation.y + vertical, transform.rotation.z, transform.rotation.w);
         }
     }
 }
